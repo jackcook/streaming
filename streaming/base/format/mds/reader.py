@@ -47,12 +47,14 @@ class MDSReader(JointReader):
         samples: int,
         size_limit: Optional[int],
         zip_data: Optional[FileInfo],
+        index: Optional[str],
     ) -> None:
         super().__init__(dirname, split, compression, hashes, raw_data, samples, size_limit,
                          zip_data)
         self.column_encodings = column_encodings
         self.column_names = column_names
         self.column_sizes = column_sizes
+        self.index = index
 
     @classmethod
     def from_json(cls, dirname: str, split: Optional[str], obj: Dict[str, Any]) -> Self:

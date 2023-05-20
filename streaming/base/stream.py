@@ -5,6 +5,7 @@
 
 import json
 import os
+import pickle
 from tempfile import mkdtemp
 from typing import List, Optional, Sequence
 
@@ -18,6 +19,23 @@ from streaming.base.hashing import get_hash
 from streaming.base.storage import download_file
 from streaming.base.util import TICK, wait_for_file_to_exist
 from streaming.base.world import World
+
+
+class FilteredShard:
+
+    def __init__(self, reader, local, split):
+        self.reader = reader
+        self.indices = pickle.load(open(os.path.join(local, split, reader.index), "rb"))
+
+        self.samples = len(self.indices)
+        self.file_pairs = reader.file_pairs
+        self.compression = reader.compression
+
+    def __len__(self):
+        return len(self.indices)
+
+    def __getitem__(self, i):
+        return self.reader[self.indices[i]]
 
 
 class Stream:
@@ -401,8 +419,13 @@ class Stream:
 
         # Initialize shard readers according to the loaded info.
         shards = []
+
         for info in obj['shards']:
             shard = reader_from_json(self.local, self.split, info)
+
+            if 'index' in info:
+                shard = FilteredShard(shard, self.local, self.split)
+
             shards.append(shard)
 
         return shards
