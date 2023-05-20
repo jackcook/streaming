@@ -423,7 +423,7 @@ class Stream:
         for info in obj['shards']:
             shard = reader_from_json(self.local, self.split, info)
 
-            if 'index' in info:
+            if 'index' in info and info['index'] is not None:
                 shard = FilteredShard(shard, self.local, self.split)
 
             shards.append(shard)

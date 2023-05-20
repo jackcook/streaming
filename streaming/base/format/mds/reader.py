@@ -78,6 +78,8 @@ class MDSReader(JointReader):
         for key in ['raw_data', 'zip_data']:
             arg = args[key]
             args[key] = FileInfo(**arg) if arg else None
+        if 'index' not in args:
+            args['index'] = None
         return cls(**args)
 
     def decode_sample(self, data: bytes) -> Dict[str, Any]:
