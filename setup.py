@@ -55,6 +55,7 @@ install_requires = [
     'xxhash>=3.0.0,<4',
     'zstd>=1.5.2.5,<2',
     'oci>=2.88,<3',
+    'azure-storage-blob>=12.0.0,<13',
 ]
 
 extra_deps = {}
@@ -72,7 +73,7 @@ extra_deps['dev'] = [
     'moto>=4.0,<5',
     'fastapi==0.95.1',
     'pydantic==1.10.7',
-    'uvicorn==0.21.1',
+    'uvicorn==0.22.0',
 ]
 
 extra_deps['docs'] = [
